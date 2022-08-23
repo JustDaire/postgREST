@@ -1,0 +1,30 @@
+; postgrest_db.service
+;
+; copy to /etc/systemd/system/postgrest_db.service
+;
+; systemctl enable postgrepostgrest_dbst_hhdb
+; systemctl start postgrest_db
+;
+; For reloading the service
+; systemctl restart postgrest_db
+
+
+[Unit]
+Description=REST API for Postgres db database
+After=postgresql.service
+
+[Service]
+
+ExecStartPre=/usr/bin/bash -c 'mkdir -p /run/postgrest'
+ExecStart=/bin/postgrest /etc/postgrest/db.conf
+ExecReload=/bin/kill -SIGUSR1 $MAINPID
+; Restart=always
+; KillSignal=SIGQUIT
+; Type=simple
+; NotifyAccess=all
+
+PIDFile=/run/postgrest/postgrest_db.pid
+
+
+[Install]
+WantedBy=multi-user.target
